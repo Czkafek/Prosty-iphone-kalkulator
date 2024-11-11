@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kalkulator</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <form name="kalkulator" id="kalkulator"> 
+            <div class="showFields">
+                <input type="text" name="dzialanie" readonly onkeydown="showWarning()">
+                <input type="text" name="wynik" readonly value="0" onkeydown="showWarning()">
+            </div>
+            <div class="options">
+                <input type="submit" value="MR" class="memory" onclick="useMemory('MR'); return false;">
+                <input type="submit" value="MR+" class="memory" onclick="useMemory('MR+'); return false;">
+                <input type="submit" value="MR-" class="memory" onclick="useMemory('MR-'); return false;">
+                <input type="submit" value="÷" class="action" onclick="addElement(this); return false;">
+                <input type="submit" value="7" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="8" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="9" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="x" class="action" onclick="addElement(this); return false;">
+                <input type="submit" value="4" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="5" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="6" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="-" class="action" onclick="addElement(this); return false;">
+                <input type="submit" value="1" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="2" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="3" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="+" class="action" onclick="addElement(this); return false;">
+                <input type="submit" value="C" class="normal" onclick="clearDisplay(); return false;">
+                <input type="submit" value="0" class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="." class="normal" onclick="addElement(this); return false;">
+                <input type="submit" value="=" class="action" onclick="calculate(); return false;">
+            </div>
+        </form>
+        <p id="warning"></p>
+
+        <script>
+            var memory = 0;
+            var counter = 0;
+
+            function addElement(button) {
+                if(counter === 1) {
+                    counter = 0;
+                    document.kalkulator.dzialanie.value = "";
+                }
+                if(button.value === '÷')
+                    var element = '/';
+                else if(button.value === 'x')
+                    var element = '*';
+                else
+                    var element = button.value;
+                document.kalkulator.dzialanie.value += element;
+            }
+
+            function clearDisplay() {
+                document.kalkulator.dzialanie.value = "";
+                document.kalkulator.wynik.value = 0;
+            }
+
+            function calculate() {
+                var result = eval(document.kalkulator.dzialanie.value);
+                if(result == undefined || result == Infinity)
+                {
+                    counter = 1;
+                    document.kalkulator.wynik.value = "Dzielenie przez zero";
+                }
+                    else
+                {
+                    document.kalkulator.wynik.value = result;
+                    document.kalkulator.dzialanie.value = result;
+                }
+                
+            }
+
+            function useMemory(button) {
+                var currentValue = parseFloat(document.kalkulator.wynik.value) || 0;
+                switch(button) {
+                    case 'MR':
+                        document.kalkulator.dzialanie.value += memory;
+                        break;
+                    case 'MR+':
+                        memory += currentValue;
+                        break;
+                    case 'MR-':
+                        memory -= currentValue;
+                        break;
+                }
+            }
+            
+            function showWarning() {
+                document.getElementById('warning').innerText = "Możliwe jest tylko używanie przycisków";
+                console.log(document.getElementById('warning'));
+            }
+
+        </script>
+    </body>
+</html>
